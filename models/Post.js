@@ -22,10 +22,12 @@ const PostSchema = new Schema({
   comments:[CommentSchema],
 // Create a "tags" property that is an array of objects
 // with type SchemaTypes.ObjectId and ref 'Tag'
-  tags: {
-    type: SchemaTypes.ObjectId,
-    ref: 'Tag'
-  },
+  tags: [
+    {
+      type: SchemaTypes.ObjectId,
+      ref: 'Tag'
+    }
+  ],
 // Create a "slug" property with type String
   slug: {
     type: String

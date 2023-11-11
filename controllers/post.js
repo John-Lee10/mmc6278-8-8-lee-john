@@ -7,7 +7,7 @@ async function create(req, res, next) {
   // if there is no title or body, return a 400 status
   // omitting tags is OK
   if (!(title && body))
-    return res.status(400)
+    return res.status(400).send('error occured')
   // create a new post using title, body, and tags
   // return the new post as json and a 200 status
   const post = await Post.create({title, body, tags})
@@ -22,7 +22,7 @@ async function get(req, res) {
     // find a single post by slug and populate 'tags'
     // you will need to use .lean() or .toObject()
     const post = await Post.findById(slug).lean()
-      .populate({path: 'tags'})
+      .populate('tags')
 
     post.createdAt = new Date(post.createdAt).toLocaleString('en-US', {
       month: '2-digit',
@@ -87,13 +87,13 @@ async function update(req, res) {
     // if there is no title or body, return a 400 status
     // omitting tags is OK
     if (!(title && body))
-      return res.status(400)
+      return res.status(400).send("error occured")
     // find and update the post with the title, body, and tags
     // return the updated post as json
-    const post = await Post.findOneAndReplace(
-      {_id: postId},
-      {$set: {title, body, tags}},
-      {new: true}
+    const post = await Post.findByIdAndUpdate(
+      postId,
+      {$set:{title, body, tags}},
+      {new:true}
     )
     res.json(post)
   } catch(err) {
